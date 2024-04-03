@@ -1,3 +1,4 @@
+// James Yue
 /**
  * Solves the given maze using DFS or BFS
  * @author Ms. Namasivayam
@@ -5,6 +6,10 @@
  */
 
 import java.util.ArrayList;
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
+
 
 public class MazeSolver {
     private Maze maze;
@@ -26,10 +31,23 @@ public class MazeSolver {
      * the parents to determine the solution
      * @return An arraylist of MazeCells to visit in order
      */
+    // Ovearheard to use else if and not else
+    // Keep track of: exploredCells, currentCells, cellsNeeded to be explored
     public ArrayList<MazeCell> getSolution() {
         // TODO: Get the solution from the maze
-        // Should be from start to end cells
-        return null;
+        ArrayList<MazeCell> solution = new ArrayList<>();
+        Stack<MazeCell> stack = new Stack<>();
+
+        MazeCell currentCell = maze.getEndCell();
+
+        while (currentCell != null) {
+            stack.push(currentCell);
+            currentCell = currentCell.getParent();
+        }
+        while (!stack.isEmpty()) {
+            solution.add(stack.pop());
+        }
+        return solution;
     }
 
     /**
@@ -38,8 +56,51 @@ public class MazeSolver {
      */
     public ArrayList<MazeCell> solveMazeDFS() {
         // TODO: Use DFS to solve the maze
-        // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
-        return null;
+
+        ArrayList<MazeCell> depthSearch = new ArrayList<>();
+        Stack<MazeCell> visitCell = new Stack<>();
+
+        MazeCell currentCell = maze.getStartCell();
+        visitCell.push(currentCell);
+
+        while (currentCell != maze.getEndCell()) {
+            currentCell = visitCell.pop();
+            currentCell.setExplored(true);
+            depthSearch.add(currentCell);
+
+            int row = currentCell.getRow();
+            int col = currentCell.getCol();
+
+            // North
+            if (maze.isValidCell(row - 1, col)) {
+                // set this to is explored
+                maze.getCell(row - 1, col).setExplored(true);
+                maze.getCell(row - 1, col).setParent(currentCell);
+                visitCell.push(maze.getCell(row - 1, col));
+            }
+            // East
+            if (maze.isValidCell(row, col + 1)) {
+                maze.getCell(row, col + 1).setExplored(true);
+                maze.getCell(row, col + 1).setParent(currentCell);
+                visitCell.push(maze.getCell(row, col + 1));
+            }
+            // South
+            if (maze.isValidCell(row + 1, col)) {
+                maze.getCell(row + 1, col).setExplored(true);
+                maze.getCell(row + 1, col).setParent(currentCell);
+                visitCell.push(maze.getCell(row + 1, col));
+            }
+            // West
+            if (maze.isValidCell(row, col - 1)) {
+                maze.getCell(row, col - 1).setExplored(true);
+                maze.getCell(row, col - 1).setParent(currentCell);
+                visitCell.push(maze.getCell(row, col - 1));
+            }
+
+        }
+      depthSearch = getSolution();
+      return depthSearch;
+//        return getSolution();
     }
 
     /**
@@ -49,7 +110,44 @@ public class MazeSolver {
     public ArrayList<MazeCell> solveMazeBFS() {
         // TODO: Use BFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
-        return null;
+
+        ArrayList<MazeCell> breadthSearch = new ArrayList<>();
+        Queue<MazeCell> visitCell = new LinkedList<>();
+
+        MazeCell currentCell = maze.getStartCell();
+        visitCell.add(currentCell);
+
+        while (currentCell != maze.getEndCell()) {
+            currentCell = visitCell.remove();
+            currentCell.setExplored(true);
+            breadthSearch.add(currentCell);
+
+            int row = currentCell.getRow();
+            int col = currentCell.getCol();
+
+            // North
+            if (maze.isValidCell(row - 1, col)) {
+                maze.getCell(row - 1, col).setParent(currentCell);
+                visitCell.add(maze.getCell(row - 1, col));
+            }
+            // East
+            if (maze.isValidCell(row, col + 1)) {
+                maze.getCell(row, col + 1).setParent(currentCell);
+                visitCell.add(maze.getCell(row, col + 1));
+            }
+            // South
+            if (maze.isValidCell(row + 1, col)) {
+                maze.getCell(row + 1, col).setParent(currentCell);
+                visitCell.add(maze.getCell(row + 1, col));
+            }
+            // West
+            if (maze.isValidCell(row, col - 1)) {
+                maze.getCell(row, col - 1).setParent(currentCell);
+                visitCell.add(maze.getCell(row, col - 1));
+            }
+        }
+        breadthSearch = getSolution();
+        return breadthSearch;
     }
 
     public static void main(String[] args) {

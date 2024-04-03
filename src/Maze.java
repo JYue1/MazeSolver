@@ -1,3 +1,4 @@
+// James Yue
 /**
  * Creates a Maze made up of MazeCells
  * @author Ms. Namasivayam
@@ -147,6 +148,15 @@ public class Maze {
      */
     public boolean isValidCell(int row, int col) {
         // TODO: Complete this function
+        if (row < 0 || row >= numRows - 1 || col < 0 || col >= numCols - 1) {
+            return false;
+        }
+        if (mazeGrid[row][col].isWall()) {
+            return false;
+        }
+        if (mazeGrid[row][col].isExplored()) {
+            return false;
+        }
         return true;
     }
 }

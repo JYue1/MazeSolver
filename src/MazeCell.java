@@ -1,3 +1,4 @@
+// James Yue
 /**
  * A class that represents a single cell of the maze.
  * @author Ms. Namasivayam
