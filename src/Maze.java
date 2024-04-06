@@ -146,17 +146,23 @@ public class Maze {
      * @param col the int col val
      * @return boolean true/false
      */
+
+    // The method isValidCell will be used in the class MazeSolver for the two searches
     public boolean isValidCell(int row, int col) {
         // TODO: Complete this function
-        if (row < 0 || row >= numRows - 1 || col < 0 || col >= numCols - 1) {
+        // Checks if the given cell is outside the bounds of the maze grid
+        if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
             return false;
         }
+        // Checks if the given cell is a wall on the maze grid
         if (mazeGrid[row][col].isWall()) {
             return false;
         }
+        // Checks if the given cell has already been explored
         if (mazeGrid[row][col].isExplored()) {
             return false;
         }
+        // If none of the requirements above have been met then the cell is a valid cell
         return true;
     }
 }
